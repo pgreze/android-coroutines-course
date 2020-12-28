@@ -1,13 +1,10 @@
 package com.techyourchance.coroutines.exercises.exercise4
 
-import java.math.BigInteger
-
-import androidx.annotation.WorkerThread
 import kotlinx.coroutines.*
+import java.math.BigInteger
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
-import kotlin.math.roundToInt
+import kotlin.math.max
 
 class FactorialUseCase {
 
@@ -44,7 +41,7 @@ class FactorialUseCase {
 
         for (i in numberOfThreads - 1 downTo 0) {
             threadsComputationRanges[i] = ComputationRange(
-                    if (i == 0) 1 else nextComputationRangeEnd - computationRangeSize + 1,
+                    max(1, nextComputationRangeEnd - computationRangeSize + 1),
                     nextComputationRangeEnd
             )
             nextComputationRangeEnd = threadsComputationRanges[i].start - 1
