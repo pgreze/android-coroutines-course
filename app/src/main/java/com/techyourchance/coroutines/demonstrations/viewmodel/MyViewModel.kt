@@ -14,6 +14,11 @@ class MyViewModel: ViewModel() {
     private val _isTrackingTime = MutableLiveData<Boolean>()
     val isTrackingTime: LiveData<Boolean> = _isTrackingTime
 
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
+    }
+
     fun toggleTrackElapsedTime() {
         val isTrackingTimeNow = isTrackingTime.value
         logThreadInfo("trackElapsedTime(); isTrackingTimeNow = $isTrackingTimeNow")
