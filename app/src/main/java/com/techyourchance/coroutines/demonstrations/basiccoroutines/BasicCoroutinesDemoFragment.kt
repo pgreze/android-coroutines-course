@@ -43,9 +43,7 @@ class BasicCoroutinesDemoFragment : BaseFragment() {
                 Toast.makeText(requireContext(), "$iterationsCount", Toast.LENGTH_SHORT).show()
                 btnStart.isEnabled = true
             }
-
         }
-
         return view
     }
 
