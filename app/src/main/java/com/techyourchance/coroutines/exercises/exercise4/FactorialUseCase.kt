@@ -4,11 +4,14 @@ import java.math.BigInteger
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.*
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 class FactorialUseCase {
 
-    public sealed class Result {
+    sealed class Result {
         class Success(val result: BigInteger) : Result()
         object Timeout : Result()
     }
@@ -35,17 +38,18 @@ class FactorialUseCase {
 
         val threadsComputationRanges = Array(numberOfThreads) { ComputationRange(0, 0) }
 
-        val computationRangeSize = factorialArgument / numberOfThreads
+        val computationRangeSize = ceil(factorialArgument.toDouble() / numberOfThreads).toInt()
 
         var nextComputationRangeEnd = factorialArgument.toLong()
 
         for (i in numberOfThreads - 1 downTo 0) {
             threadsComputationRanges[i] = ComputationRange(
-                    nextComputationRangeEnd - computationRangeSize + 1,
+                    if (i == 0) 1 else nextComputationRangeEnd - computationRangeSize + 1,
                     nextComputationRangeEnd
             )
             nextComputationRangeEnd = threadsComputationRanges[i].start - 1
         }
+        println("Threads=${numberOfThreads} rangeSize=${computationRangeSize} and ${threadsComputationRanges.contentToString()}")
 
         // add potentially "remaining" values to first thread's range
         //threadsComputationRanges[0] = ComputationRange(1, threadsComputationRanges[0].end)
